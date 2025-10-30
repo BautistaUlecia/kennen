@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	infragroup "kennen/internal/infrastructure/group"
 	httpgroup "kennen/internal/presentation/http/group"
 	"kennen/internal/usecase/group"
 	"net/http"
@@ -19,7 +20,9 @@ func main() {
 	g.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
-	createGroupUseCase := group.NewCreateGroup()
+	groupRepository := infragroup.NewInMemoryRepository()
+	createGroupUseCase := group.NewCreateGroup(groupRepository)
+
 	getGroupUseCase := group.NewGetGroup()
 	addToGroupUseCase := group.NewAddToGroup()
 
