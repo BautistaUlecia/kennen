@@ -1,6 +1,7 @@
 package httpgroup
 
 import (
+	"errors"
 	"kennen/internal/usecase/group"
 	"net/http"
 
@@ -29,5 +30,17 @@ func (h *CreateHandler) create(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
 		return
 	}
-	h.createGroupUseCase.Run(request.Name)
+
+	id, err := h.createGroupUseCase.Run(request.Name)
+	if err != nil {
+		if errors.Is(err, group.ErrNameTaken) {
+			c.JSON(http.StatusConflict, gin.H{"error": "group name already taken"})
+			return
+		}
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+	c.JSON(http.StatusCreated, gin.H{"id": id})
+	return
 }

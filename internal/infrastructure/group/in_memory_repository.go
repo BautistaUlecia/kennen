@@ -1,6 +1,9 @@
 package infragroup
 
-import "kennen/internal/domain"
+import (
+	"kennen/internal/domain"
+	"kennen/internal/usecase/group"
+)
 
 type InMemoryRepository struct {
 	byName map[string]domain.Group
@@ -19,4 +22,11 @@ func (r *InMemoryRepository) Save(g *domain.Group) error {
 	r.byName[g.Name] = *g
 	r.byId[g.ID] = *g
 	return nil
+}
+func (r *InMemoryRepository) GetByID(ID string) (*domain.Group, error) {
+	g, ok := r.byId[ID]
+	if !ok {
+		return nil, group.ErrNotFound
+	}
+	return &g, nil
 }

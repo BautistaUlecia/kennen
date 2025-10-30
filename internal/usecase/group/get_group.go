@@ -1,12 +1,24 @@
 package group
 
+import (
+	"errors"
+	"kennen/internal/domain"
+)
+
+var ErrNotFound = errors.New("group not found")
+
 type GetGroup struct {
+	repository GetRepository
 }
 
-func (g *GetGroup) Run() {
-
+type GetRepository interface {
+	GetByID(ID string) (*domain.Group, error)
 }
 
-func NewGetGroup() *GetGroup {
-	return &GetGroup{}
+func NewGetGroup(repository GetRepository) *GetGroup {
+	return &GetGroup{repository: repository}
+}
+
+func (g *GetGroup) Run(ID string) (*domain.Group, error) {
+	return g.repository.GetByID(ID)
 }

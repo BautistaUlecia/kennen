@@ -21,9 +21,10 @@ func main() {
 		c.String(http.StatusOK, "ok")
 	})
 	groupRepository := infragroup.NewInMemoryRepository()
-	createGroupUseCase := group.NewCreateGroup(groupRepository)
 
-	getGroupUseCase := group.NewGetGroup()
+	createGroupUseCase := group.NewCreateGroup(groupRepository)
+	getGroupUseCase := group.NewGetGroup(groupRepository)
+
 	addToGroupUseCase := group.NewAddToGroup()
 
 	httpgroup.NewGetHandler(getGroupUseCase).Register(g)

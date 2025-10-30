@@ -1,39 +1,43 @@
 package group
 
 import (
+	"errors"
 	"fmt"
 	"kennen/internal/domain"
 )
 
 type CreateGroup struct {
-	repository Repository
+	repository CreateRepository
 }
-type Repository interface {
+
+var ErrNameTaken = errors.New("group name already taken")
+
+type CreateRepository interface {
 	ExistsByName(name string) (bool, error)
 	Save(group *domain.Group) error
 }
 
-func NewCreateGroup(repository Repository) *CreateGroup {
+func NewCreateGroup(repository CreateRepository) *CreateGroup {
 	return &CreateGroup{repository: repository}
 }
 
-func (c *CreateGroup) Run(name string) error {
+func (c *CreateGroup) Run(name string) (string, error) {
 	g, err := domain.NewGroup(name)
 	if err != nil {
-		return fmt.Errorf("error with group creation: %w", err)
+		return "", fmt.Errorf("error with group creation: %w", err)
 	}
 
 	exists, err := c.repository.ExistsByName(name)
 	if err != nil {
-		return fmt.Errorf("error finding group by name %w", err)
+		return "", fmt.Errorf("error finding group by name %w", err)
 	}
 	if exists {
-		return fmt.Errorf("group name is already taken")
+		return "", ErrNameTaken
 	}
 
 	err = c.repository.Save(g)
 	if err != nil {
-		return fmt.Errorf("error saving group: %w", err)
+		return "", fmt.Errorf("error saving group: %w", err)
 	}
-	return nil
+	return g.ID, nil
 }
