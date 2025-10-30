@@ -1,14 +1,14 @@
 package httpgroup
 
 import (
-	"kennen/internal/usecase"
+	"kennen/internal/usecase/group"
 
 	"github.com/gin-gonic/gin"
 )
 
-type GetHandler struct{ uc *usecase.GetGroup }
+type GetHandler struct{ uc *group.GetGroup }
 
-func NewGetHandler(uc *usecase.GetGroup) *GetHandler { return &GetHandler{uc: uc} }
+func NewGetHandler(uc *group.GetGroup) *GetHandler { return &GetHandler{uc: uc} }
 
 func (h *GetHandler) Register(r *gin.Engine) {
 	r.GET("/groups/:id", h.getGet)

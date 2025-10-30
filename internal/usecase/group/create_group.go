@@ -1,10 +1,14 @@
-package usecase
+package group
+
+import "kennen/internal/domain"
 
 type CreateGroup struct {
 }
 
-func (c *CreateGroup) Run() {
+var counter int = 0
 
+func (c *CreateGroup) Run(name string) {
+	domain.NewGroup(name)
 }
 
 func NewCreateGroup() *CreateGroup {

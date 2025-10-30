@@ -1,4 +1,4 @@
-package usecase
+package group
 
 type AddToGroup struct {
 }

@@ -1,16 +1,16 @@
 package httpgroup
 
 import (
-	"kennen/internal/usecase"
+	"kennen/internal/usecase/group"
 
 	"github.com/gin-gonic/gin"
 )
 
 type AddHandler struct {
-	uc *usecase.AddToGroup
+	uc *group.AddToGroup
 }
 
-func NewAddHandler(uc *usecase.AddToGroup) *AddHandler {
+func NewAddHandler(uc *group.AddToGroup) *AddHandler {
 	return &AddHandler{uc: uc}
 }
 
