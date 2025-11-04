@@ -99,7 +99,7 @@ func (c *Client) entriesByEncryptedPuuid(encryptedPuuid, region string) ([]Leagu
 }
 
 func (c *Client) findRankedSolo(entries []LeagueEntryDTO) LeagueEntryDTO {
-	const rankedSolo5x5 = "RANKED_SOLO_5X5"
+	const rankedSolo5x5 = "RANKED_SOLO_5x5"
 
 	for i := range entries {
 		if entries[i].QueueType == rankedSolo5x5 {
