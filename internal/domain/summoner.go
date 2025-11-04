@@ -1,5 +1,9 @@
 package domain
 
 type Summoner struct {
-	name string
+	Name         string
+	Rank         string
+	LeaguePoints int
+	Wins         int
+	Losses       int
 }

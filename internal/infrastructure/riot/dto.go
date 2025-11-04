@@ -8,8 +8,10 @@ type AccountDTO struct {
 	Puuid string
 }
 type LeagueEntryDTO struct {
-	Rank         string
-	Leaguepoints int
-	wins         int
-	loses        int
+	QueueType    string `json:"queueType"`
+	Tier         string `json:"tier"`
+	Rank         string `json:"rank"`
+	LeaguePoints int    `json:"leaguePoints"`
+	Wins         int    `json:"wins"`
+	Losses       int    `json:"losses"`
 }
