@@ -69,6 +69,7 @@ Ask the team to get the API key.
 ## API Endpoints
 
 - `GET /health` - Health check endpoint
+- `GET /groups` - List all groups
 - `GET /groups/:id` - Get group by ID
 - `POST /groups` - Create a new group
 - `POST /groups/:id/summoners` - Add a summoner to a group
