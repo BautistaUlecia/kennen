@@ -9,7 +9,7 @@ import (
 )
 
 type CreateGroupRequest struct {
-	Name string
+	Name string `json:"name"`
 }
 
 type CreateHandler struct {

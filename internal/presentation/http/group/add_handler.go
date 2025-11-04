@@ -11,9 +11,9 @@ type AddHandler struct {
 	uc *group.AddToGroup
 }
 type AddToGroupRequest struct {
-	Region   string
-	GameName string
-	Tag      string
+	Region   string `json:"region"`
+	GameName string `json:"game_name"`
+	Tag      string `json:"tag"`
 }
 
 func NewAddHandler(uc *group.AddToGroup) *AddHandler {

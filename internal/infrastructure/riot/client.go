@@ -8,10 +8,6 @@ import (
 	"net/url"
 )
 
-// /riot/account/v1/accounts/by-riot-id/{gameName}/{tagLine}
-
-// /lol/league/v4/entries/by-puuid/{encryptedPUUID
-
 const accountByRiotIdPath = "/riot/account/v1/accounts/by-riot-id/%s/%s"
 const entriesByEncryptedPuuid = "/lol/league/v4/entries/by-puuid/%s"
 
