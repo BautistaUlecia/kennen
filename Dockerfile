@@ -4,6 +4,7 @@ COPY go.mod go.sum ./
 RUN go mod download && go mod verify
 
 FROM build AS prod
+ENV GIN_MODE=release
 COPY . .
 RUN go build -o /usr/local/bin/app ./cmd/kennen/main.go
 CMD ["/usr/local/bin/app"]
