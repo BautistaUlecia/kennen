@@ -23,14 +23,16 @@ func main() {
 	g.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
-	
+
 	groupRepository := infragroup.NewInMemoryRepository()
 	riotClient := riot.NewClient(http.DefaultClient, apiKey)
 
+	listGroupUseCase := group.NewListGroup(groupRepository)
 	createGroupUseCase := group.NewCreateGroup(groupRepository)
 	getGroupUseCase := group.NewGetGroup(groupRepository)
 	addToGroupUseCase := group.NewAddToGroup(groupRepository, riotClient)
 
+	httpgroup.NewListHandler(listGroupUseCase).Register(g)
 	httpgroup.NewGetHandler(getGroupUseCase).Register(g)
 	httpgroup.NewCreateHandler(createGroupUseCase).Register(g)
 	httpgroup.NewAddHandler(addToGroupUseCase).Register(g)

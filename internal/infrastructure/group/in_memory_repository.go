@@ -6,12 +6,13 @@ import (
 )
 
 type InMemoryRepository struct {
+	all    []*domain.Group
 	byName map[string]domain.Group
 	byId   map[string]domain.Group
 }
 
 func NewInMemoryRepository() *InMemoryRepository {
-	return &InMemoryRepository{byId: make(map[string]domain.Group), byName: make(map[string]domain.Group)}
+	return &InMemoryRepository{all: make([]*domain.Group, 0), byId: make(map[string]domain.Group), byName: make(map[string]domain.Group)}
 }
 
 func (r *InMemoryRepository) ExistsByName(name string) (bool, error) {
@@ -19,6 +20,7 @@ func (r *InMemoryRepository) ExistsByName(name string) (bool, error) {
 	return exists, nil
 }
 func (r *InMemoryRepository) Save(g *domain.Group) error {
+	r.all = append(r.all, g)
 	r.byName[g.Name] = *g
 	r.byId[g.ID] = *g
 	return nil
@@ -29,4 +31,7 @@ func (r *InMemoryRepository) GetByID(ID string) (*domain.Group, error) {
 		return nil, group.ErrNotFound
 	}
 	return &g, nil
+}
+func (r *InMemoryRepository) List() ([]*domain.Group, error) {
+	return r.all, nil
 }
