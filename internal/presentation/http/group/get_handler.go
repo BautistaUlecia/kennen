@@ -28,6 +28,7 @@ func (h *GetHandler) get(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, g)
+	gr := toGroupResponse(g)
+	c.JSON(http.StatusOK, gr)
 
 }

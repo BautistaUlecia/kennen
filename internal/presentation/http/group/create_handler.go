@@ -8,10 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type CreateGroupRequest struct {
-	Name string `json:"name"`
-}
-
 type CreateHandler struct {
 	createGroupUseCase *group.CreateGroup
 }
@@ -31,7 +27,7 @@ func (h *CreateHandler) create(c *gin.Context) {
 		return
 	}
 
-	id, err := h.createGroupUseCase.Run(request.Name)
+	g, err := h.createGroupUseCase.Run(request.Name)
 	if err != nil {
 		if errors.Is(err, group.ErrNameTaken) {
 			c.JSON(http.StatusConflict, gin.H{"error": "group name already taken"})
@@ -41,5 +37,6 @@ func (h *CreateHandler) create(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	c.JSON(http.StatusCreated, gin.H{"id": id})
+	gr := toGroupResponse(g)
+	c.JSON(http.StatusCreated, gr)
 }
