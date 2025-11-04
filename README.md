@@ -58,7 +58,7 @@ Ask the team to get the API key.
    Alternatively, use a `.env` file:
 
    ```bash
-   docker run -p 8080:8080 --env-file .env kennen
+   docker run --name kennen -p 8080:8080 --env-file .env kennen
    ```
 
 3. **Verify the application is running:**
