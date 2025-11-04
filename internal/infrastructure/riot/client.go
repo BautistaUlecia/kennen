@@ -114,6 +114,7 @@ func (c *Client) mapToSummoner(dto LeagueEntryDTO, gameName, tag string) (*domai
 
 	return &domain.Summoner{
 			Name:         formattedName,
+			Tier:         dto.Tier,
 			Rank:         dto.Rank,
 			LeaguePoints: dto.LeaguePoints,
 			Wins:         dto.Wins,

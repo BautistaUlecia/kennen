@@ -7,6 +7,7 @@ type GroupResponse struct {
 }
 type SummonerResponse struct {
 	Name   string `json:"name"`
+	Tier   string `json:"tier"`
 	Rank   string `json:"rank"`
 	LP     int    `json:"lp"`
 	Wins   int    `json:"wins"`

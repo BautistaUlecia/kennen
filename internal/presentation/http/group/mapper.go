@@ -7,7 +7,7 @@ func toGroupResponse(g *domain.Group) GroupResponse {
 	out.Summoners = make([]SummonerResponse, 0, len(g.Summoners))
 	for _, s := range g.Summoners {
 		out.Summoners = append(out.Summoners, SummonerResponse{
-			Name: s.Name, Rank: s.Rank, LP: s.LeaguePoints, Wins: s.Wins, Losses: s.Losses,
+			Name: s.Name, Tier: s.Tier, Rank: s.Rank, LP: s.LeaguePoints, Wins: s.Wins, Losses: s.Losses,
 		})
 	}
 	return out
