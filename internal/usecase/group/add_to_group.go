@@ -15,8 +15,8 @@ type AddToRepository interface {
 	Save(group *domain.Group) error
 }
 
-func NewAddToGroup(repository AddToRepository, riotClient *riot.Client) *AddToGroup {
-	return &AddToGroup{repository: repository, riotClient: riotClient}
+func NewAddToGroup(r AddToRepository, c *riot.Client) *AddToGroup {
+	return &AddToGroup{repository: r, riotClient: c}
 }
 
 func (a *AddToGroup) Run(ID, gameName, tag, region string) error {

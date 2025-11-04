@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GetHandler struct{ uc *group.GetGroup }
+type GetHandler struct{ getGroupUseCase *group.GetGroup }
 
-func NewGetHandler(uc *group.GetGroup) *GetHandler { return &GetHandler{uc: uc} }
+func NewGetHandler(uc *group.GetGroup) *GetHandler { return &GetHandler{getGroupUseCase: uc} }
 
 func (h *GetHandler) Register(r *gin.Engine) {
 	r.GET("/groups/:id", h.get)
@@ -18,7 +18,7 @@ func (h *GetHandler) Register(r *gin.Engine) {
 
 func (h *GetHandler) get(c *gin.Context) {
 	id := c.Param("id")
-	g, err := h.uc.Run(id)
+	g, err := h.getGroupUseCase.Run(id)
 	if err != nil {
 		if errors.Is(err, group.ErrNotFound) {
 			c.JSON(http.StatusNotFound, gin.H{"error": "group not found"})

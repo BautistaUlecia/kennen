@@ -17,8 +17,8 @@ type CreateRepository interface {
 	Save(group *domain.Group) error
 }
 
-func NewCreateGroup(repository CreateRepository) *CreateGroup {
-	return &CreateGroup{repository: repository}
+func NewCreateGroup(r CreateRepository) *CreateGroup {
+	return &CreateGroup{repository: r}
 }
 
 func (c *CreateGroup) Run(name string) (string, error) {
