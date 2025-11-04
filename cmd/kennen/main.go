@@ -24,18 +24,18 @@ func main() {
 		c.String(http.StatusOK, "ok")
 	})
 
-	groupRepository := infragroup.NewInMemoryRepository()
-	riotClient := riot.NewClient(http.DefaultClient, apiKey)
+	gr := infragroup.NewInMemoryRepository()
+	rc := riot.NewClient(http.DefaultClient, apiKey)
 
-	listGroupUseCase := group.NewListGroup(groupRepository)
-	createGroupUseCase := group.NewCreateGroup(groupRepository)
-	getGroupUseCase := group.NewGetGroup(groupRepository)
-	addToGroupUseCase := group.NewAddToGroup(groupRepository, riotClient)
+	lguc := group.NewListGroup(gr)
+	cguc := group.NewCreateGroup(gr)
+	gguc := group.NewGetGroup(gr)
+	atguc := group.NewAddToGroup(gr, rc)
 
-	httpgroup.NewListHandler(listGroupUseCase).Register(g)
-	httpgroup.NewGetHandler(getGroupUseCase).Register(g)
-	httpgroup.NewCreateHandler(createGroupUseCase).Register(g)
-	httpgroup.NewAddHandler(addToGroupUseCase).Register(g)
+	httpgroup.NewListHandler(lguc).Register(g)
+	httpgroup.NewGetHandler(gguc).Register(g)
+	httpgroup.NewCreateHandler(cguc).Register(g)
+	httpgroup.NewAddHandler(atguc).Register(g)
 
 	g.Run(":8080")
 }

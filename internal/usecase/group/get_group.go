@@ -15,8 +15,8 @@ type GetRepository interface {
 	GetByID(ID string) (*domain.Group, error)
 }
 
-func NewGetGroup(repository GetRepository) *GetGroup {
-	return &GetGroup{repository: repository}
+func NewGetGroup(r GetRepository) *GetGroup {
+	return &GetGroup{repository: r}
 }
 
 func (g *GetGroup) Run(ID string) (*domain.Group, error) {

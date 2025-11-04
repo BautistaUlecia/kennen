@@ -16,8 +16,8 @@ type CreateHandler struct {
 	createGroupUseCase *group.CreateGroup
 }
 
-func NewCreateHandler(createGroupUseCase *group.CreateGroup) *CreateHandler {
-	return &CreateHandler{createGroupUseCase: createGroupUseCase}
+func NewCreateHandler(uc *group.CreateGroup) *CreateHandler {
+	return &CreateHandler{createGroupUseCase: uc}
 }
 func (h *CreateHandler) Register(r *gin.Engine) {
 	r.POST("/groups", h.create)
@@ -42,5 +42,4 @@ func (h *CreateHandler) create(c *gin.Context) {
 		return
 	}
 	c.JSON(http.StatusCreated, gin.H{"id": id})
-	return
 }

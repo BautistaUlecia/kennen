@@ -12,8 +12,8 @@ type ListRepository interface {
 	List() ([]*domain.Group, error)
 }
 
-func NewListGroup(repository ListRepository) *ListGroup {
-	return &ListGroup{repository: repository}
+func NewListGroup(r ListRepository) *ListGroup {
+	return &ListGroup{repository: r}
 }
 
 func (g *ListGroup) Run() ([]*domain.Group, error) {

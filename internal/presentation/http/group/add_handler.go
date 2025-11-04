@@ -8,7 +8,7 @@ import (
 )
 
 type AddHandler struct {
-	uc *group.AddToGroup
+	addToGroupUseCase *group.AddToGroup
 }
 type AddToGroupRequest struct {
 	Region   string `json:"region"`
@@ -17,7 +17,7 @@ type AddToGroupRequest struct {
 }
 
 func NewAddHandler(uc *group.AddToGroup) *AddHandler {
-	return &AddHandler{uc: uc}
+	return &AddHandler{addToGroupUseCase: uc}
 }
 
 func (h *AddHandler) Register(r *gin.Engine) {
@@ -32,7 +32,7 @@ func (h *AddHandler) addToGroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
 		return
 	}
-	err = h.uc.Run(groupID, request.GameName, request.Tag, request.Region)
+	err = h.addToGroupUseCase.Run(groupID, request.GameName, request.Tag, request.Region)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 	}
