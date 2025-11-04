@@ -110,7 +110,7 @@ func (c *Client) findRankedSolo(entries []LeagueEntryDTO) LeagueEntryDTO {
 }
 
 func (c *Client) mapToSummoner(dto LeagueEntryDTO, gameName, tag string) (*domain.Summoner, error) {
-	formattedName := fmt.Sprintf(gameName, tag)
+	formattedName := gameName + "#" + tag
 
 	return &domain.Summoner{
 			Name:         formattedName,
