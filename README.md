@@ -52,13 +52,13 @@ Ask the team to get the API key.
 2. **Run the container:**
 
    ```bash
-   docker run --name kennen -p 8080:8080 -e RIOT_API_KEY=your_riot_api_key_here kennen
+   docker run -d --name kennen -p 8080:8080 -e RIOT_API_KEY=your_riot_api_key_here kennen
    ```
 
    Alternatively, use a `.env` file:
 
    ```bash
-   docker run --name kennen -p 8080:8080 --env-file .env kennen
+   docker run -d --name kennen -p 8080:8080 --env-file .env kennen
    ```
 
 3. **Verify the application is running:**

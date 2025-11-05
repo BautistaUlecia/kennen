@@ -13,7 +13,7 @@ func NewListHandler(uc *group.ListGroup) *ListHandler {
 	return &ListHandler{listGroupsUseCase: uc}
 }
 
-func (h *ListHandler) Register(r *gin.Engine) {
+func (h *ListHandler) Register(r gin.IRouter) {
 	r.GET("/groups", h.list)
 }
 
