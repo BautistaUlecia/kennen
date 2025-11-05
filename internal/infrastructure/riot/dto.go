@@ -15,3 +15,8 @@ type LeagueEntryDTO struct {
 	Wins         int    `json:"wins"`
 	Losses       int    `json:"losses"`
 }
+
+type SummonerInfoDTO struct {
+	ProfileIconID int `json:"profileIconId"`
+	SummonerLevel int `json:"summonerLevel"`
+}

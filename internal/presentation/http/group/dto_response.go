@@ -12,4 +12,6 @@ type SummonerResponse struct {
 	LP     int    `json:"lp"`
 	Wins   int    `json:"wins"`
 	Losses int    `json:"losses"`
+	IconID int    `json:"icon_id"`
+	Level  int    `json:"level"`
 }

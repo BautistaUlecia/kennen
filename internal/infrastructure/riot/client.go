@@ -10,6 +10,7 @@ import (
 
 const accountByRiotIdPath = "/riot/account/v1/accounts/by-riot-id/%s/%s"
 const entriesByEncryptedPuuid = "/lol/league/v4/entries/by-puuid/%s"
+const summonerInformationByEncryptedPuuid = "/lol/summoner/v4/summoners/by-puuid/%s"
 
 type Client struct {
 	httpClient *http.Client
@@ -35,9 +36,14 @@ func (c *Client) FindSummoner(gameName, tagLine, region string) (*domain.Summone
 		return nil, fmt.Errorf("entries error: %w", err)
 	}
 
+	si, err := c.summonerInfoByEncryptedPuuid(acc.Puuid, region)
+	if err != nil {
+		return nil, fmt.Errorf("summoner info error: %w", err)
+	}
+
 	e := c.findRankedSolo(entries)
 
-	s, err := c.mapToSummoner(e, gameName, tagLine)
+	s, err := c.mapToSummoner(e, gameName, tagLine, si)
 	if err != nil {
 		return nil, fmt.Errorf("error mapping to summoner: %w", err)
 	}
@@ -97,6 +103,29 @@ func (c *Client) entriesByEncryptedPuuid(encryptedPuuid, region string) ([]Leagu
 	}
 	return entries, nil
 }
+func (c *Client) summonerInfoByEncryptedPuuid(encryptedPuuid, region string) (SummonerInfoDTO, error) {
+	s := SummonerInfoDTO{}
+	p := url.PathEscape(encryptedPuuid)
+	u := fmt.Sprintf(c.baseURL, region) + fmt.Sprintf(summonerInformationByEncryptedPuuid, p)
+
+	req, err := http.NewRequest(http.MethodGet, u, nil)
+	if err != nil {
+		return s, fmt.Errorf("error generating request for summoner info by puuid %w", err)
+	}
+	req.Header.Set("X-RIOT-TOKEN", c.apiKey)
+	resp, err := c.httpClient.Do(req)
+	if err != nil {
+		return s, fmt.Errorf("error in do request: %w", err)
+	}
+	if resp.StatusCode != http.StatusOK {
+		return s, fmt.Errorf("riot api responded with code %d", resp.StatusCode)
+	}
+	err = json.NewDecoder(resp.Body).Decode(&s)
+	if err != nil {
+		return s, fmt.Errorf("error in decode body: %w", err)
+	}
+	return s, nil
+}
 
 func (c *Client) findRankedSolo(entries []LeagueEntryDTO) LeagueEntryDTO {
 	const rankedSolo5x5 = "RANKED_SOLO_5x5"
@@ -109,7 +138,7 @@ func (c *Client) findRankedSolo(entries []LeagueEntryDTO) LeagueEntryDTO {
 	return entries[0]
 }
 
-func (c *Client) mapToSummoner(dto LeagueEntryDTO, gameName, tag string) (*domain.Summoner, error) {
+func (c *Client) mapToSummoner(dto LeagueEntryDTO, gameName, tag string, summonerInfo SummonerInfoDTO) (*domain.Summoner, error) {
 	formattedName := gameName + "#" + tag
 
 	return &domain.Summoner{
@@ -118,6 +147,9 @@ func (c *Client) mapToSummoner(dto LeagueEntryDTO, gameName, tag string) (*domai
 			Rank:         dto.Rank,
 			LeaguePoints: dto.LeaguePoints,
 			Wins:         dto.Wins,
-			Losses:       dto.Losses},
+			Losses:       dto.Losses,
+			IconID:       summonerInfo.ProfileIconID,
+			Level:        summonerInfo.SummonerLevel,
+		},
 		nil
 }
