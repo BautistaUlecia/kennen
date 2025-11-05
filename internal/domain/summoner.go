@@ -7,4 +7,6 @@ type Summoner struct {
 	LeaguePoints int
 	Wins         int
 	Losses       int
+	IconID       int
+	Level        int
 }
