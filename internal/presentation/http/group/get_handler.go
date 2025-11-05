@@ -12,7 +12,7 @@ type GetHandler struct{ getGroupUseCase *group.GetGroup }
 
 func NewGetHandler(uc *group.GetGroup) *GetHandler { return &GetHandler{getGroupUseCase: uc} }
 
-func (h *GetHandler) Register(r *gin.Engine) {
+func (h *GetHandler) Register(r gin.IRouter) {
 	r.GET("/groups/:id", h.get)
 }
 

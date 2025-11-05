@@ -20,7 +20,11 @@ func main() {
 
 	// Esto creo que va en otro file tipo bootstrap.go
 	g := gin.Default()
-	g.GET("/health", func(c *gin.Context) {
+	
+	// Create API group with /api prefix
+	api := g.Group("/api")
+	
+	api.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
 
@@ -32,10 +36,10 @@ func main() {
 	gguc := group.NewGetGroup(gr)
 	atguc := group.NewAddToGroup(gr, rc)
 
-	httpgroup.NewListHandler(lguc).Register(g)
-	httpgroup.NewGetHandler(gguc).Register(g)
-	httpgroup.NewCreateHandler(cguc).Register(g)
-	httpgroup.NewAddHandler(atguc).Register(g)
+	httpgroup.NewListHandler(lguc).Register(api)
+	httpgroup.NewGetHandler(gguc).Register(api)
+	httpgroup.NewCreateHandler(cguc).Register(api)
+	httpgroup.NewAddHandler(atguc).Register(api)
 
 	g.Run(":8080")
 }

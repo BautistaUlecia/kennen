@@ -20,7 +20,7 @@ func NewAddHandler(uc *group.AddToGroup) *AddHandler {
 	return &AddHandler{addToGroupUseCase: uc}
 }
 
-func (h *AddHandler) Register(r *gin.Engine) {
+func (h *AddHandler) Register(r gin.IRouter) {
 	r.POST("/groups/:id/summoners", h.addToGroup)
 }
 

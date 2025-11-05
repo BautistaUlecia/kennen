@@ -19,7 +19,7 @@ type CreateHandler struct {
 func NewCreateHandler(uc *group.CreateGroup) *CreateHandler {
 	return &CreateHandler{createGroupUseCase: uc}
 }
-func (h *CreateHandler) Register(r *gin.Engine) {
+func (h *CreateHandler) Register(r gin.IRouter) {
 	r.POST("/groups", h.create)
 }
 
