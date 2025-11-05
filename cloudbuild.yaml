@@ -1,5 +1,9 @@
 steps:
 - name: 'gcr.io/cloud-builders/docker'
-  args: ['build', '-t', 'gcr.io/rivalry-ranks-prod/github.com/rivalry-ranks/kennen:$COMMIT_SHA', '.']
+  args: ['build', '-t', 'us-central1-docker.pkg.dev/rivalry-ranks-prod/kennen/frontend:latest', '.']
+- name: 'gcr.io/cloud-builders/docker'
+  args: ['push', 'us-central1-docker.pkg.dev/rivalry-ranks-prod/kennen/frontend:latest']
+images:
+- 'us-central1-docker.pkg.dev/rivalry-ranks-prod/kennen/frontend:latest'
 options:
   logging: CLOUD_LOGGING_ONLY
