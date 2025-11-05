@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )
@@ -20,10 +21,17 @@ func main() {
 
 	// Esto creo que va en otro file tipo bootstrap.go
 	g := gin.Default()
-	
+
+	// Configure CORS
+	g.Use(cors.New(cors.Config{
+		AllowOrigins: []string{"http://localhost:4200", "https://rivalry-ranks.com"},
+		AllowMethods: []string{"GET", "POST", "OPTIONS"},
+		AllowHeaders: []string{"Content-Type"},
+	}))
+
 	// Create API group with /api prefix
 	api := g.Group("/api")
-	
+
 	api.GET("/health", func(c *gin.Context) {
 		c.String(http.StatusOK, "ok")
 	})
