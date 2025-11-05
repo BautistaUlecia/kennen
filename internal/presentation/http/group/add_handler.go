@@ -10,11 +10,6 @@ import (
 type AddHandler struct {
 	addToGroupUseCase *group.AddToGroup
 }
-type AddToGroupRequest struct {
-	Region   string `json:"region"`
-	GameName string `json:"game_name"`
-	Tag      string `json:"tag"`
-}
 
 func NewAddHandler(uc *group.AddToGroup) *AddHandler {
 	return &AddHandler{addToGroupUseCase: uc}
@@ -32,8 +27,11 @@ func (h *AddHandler) addToGroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "invalid json"})
 		return
 	}
-	err = h.addToGroupUseCase.Run(groupID, request.GameName, request.Tag, request.Region)
+	g, err := h.addToGroupUseCase.Run(groupID, request.GameName, request.Tag, request.Region)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 	}
+
+	gr := toGroupResponse(g)
+	c.JSON(http.StatusOK, gr)
 }

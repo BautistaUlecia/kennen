@@ -19,21 +19,21 @@ func NewAddToGroup(r AddToRepository, c *riot.Client) *AddToGroup {
 	return &AddToGroup{repository: r, riotClient: c}
 }
 
-func (a *AddToGroup) Run(ID, gameName, tag, region string) error {
+func (a *AddToGroup) Run(ID, gameName, tag, region string) (*domain.Group, error) {
 	g, err := a.repository.GetByID(ID)
 	if err != nil {
-		return fmt.Errorf("error getting group by id: %w", err)
+		return nil, fmt.Errorf("error getting group by id: %w", err)
 	}
 	s, err := a.riotClient.FindSummoner(gameName, tag, region)
 	if err != nil {
-		return fmt.Errorf("error getting summoner by name: %v, %v. %w", gameName, tag, err)
+		return nil, fmt.Errorf("error getting summoner by name: %v, %v. %w", gameName, tag, err)
 	}
 
 	g.AddSummoner(*s)
 
 	err = a.repository.Save(g)
 	if err != nil {
-		return fmt.Errorf("error saving group: %w", err)
+		return nil, fmt.Errorf("error saving group: %w", err)
 	}
-	return nil
+	return g, nil
 }

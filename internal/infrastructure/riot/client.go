@@ -99,7 +99,7 @@ func (c *Client) entriesByEncryptedPuuid(encryptedPuuid, region string) ([]Leagu
 }
 
 func (c *Client) findRankedSolo(entries []LeagueEntryDTO) LeagueEntryDTO {
-	const rankedSolo5x5 = "RANKED_SOLO_5X5"
+	const rankedSolo5x5 = "RANKED_SOLO_5x5"
 
 	for i := range entries {
 		if entries[i].QueueType == rankedSolo5x5 {
@@ -110,10 +110,11 @@ func (c *Client) findRankedSolo(entries []LeagueEntryDTO) LeagueEntryDTO {
 }
 
 func (c *Client) mapToSummoner(dto LeagueEntryDTO, gameName, tag string) (*domain.Summoner, error) {
-	formattedName := fmt.Sprintf(gameName, tag)
+	formattedName := gameName + "#" + tag
 
 	return &domain.Summoner{
 			Name:         formattedName,
+			Tier:         dto.Tier,
 			Rank:         dto.Rank,
 			LeaguePoints: dto.LeaguePoints,
 			Wins:         dto.Wins,

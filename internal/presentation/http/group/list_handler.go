@@ -18,12 +18,16 @@ func (h *ListHandler) Register(r *gin.Engine) {
 }
 
 func (h *ListHandler) list(c *gin.Context) {
-	g, err := h.listGroupsUseCase.Run()
+	groups, err := h.listGroupsUseCase.Run()
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, g)
+	responses := make([]GroupResponse, 0, len(groups))
+	for _, g := range groups {
+		responses = append(responses, toGroupResponse(g))
+	}
+	c.JSON(http.StatusOK, responses)
 
 }

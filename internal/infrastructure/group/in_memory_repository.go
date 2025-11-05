@@ -20,9 +20,17 @@ func (r *InMemoryRepository) ExistsByName(name string) (bool, error) {
 	return exists, nil
 }
 func (r *InMemoryRepository) Save(g *domain.Group) error {
-	r.all = append(r.all, g)
 	r.byName[g.Name] = *g
 	r.byId[g.ID] = *g
+
+	for i, existing := range r.all {
+		if existing.ID == g.ID {
+			r.all[i] = g
+			return nil
+		}
+	}
+	r.all = append(r.all, g)
+
 	return nil
 }
 func (r *InMemoryRepository) GetByID(ID string) (*domain.Group, error) {

@@ -21,23 +21,23 @@ func NewCreateGroup(r CreateRepository) *CreateGroup {
 	return &CreateGroup{repository: r}
 }
 
-func (c *CreateGroup) Run(name string) (string, error) {
+func (c *CreateGroup) Run(name string) (*domain.Group, error) {
 	g, err := domain.NewGroup(name)
 	if err != nil {
-		return "", fmt.Errorf("error with group creation: %w", err)
+		return nil, fmt.Errorf("error with group creation: %w", err)
 	}
 
 	exists, err := c.repository.ExistsByName(name)
 	if err != nil {
-		return "", fmt.Errorf("error finding group by name %w", err)
+		return nil, fmt.Errorf("error finding group by name %w", err)
 	}
 	if exists {
-		return "", ErrNameTaken
+		return nil, ErrNameTaken
 	}
 
 	err = c.repository.Save(g)
 	if err != nil {
-		return "", fmt.Errorf("error saving group: %w", err)
+		return nil, fmt.Errorf("error saving group: %w", err)
 	}
-	return g.ID, nil
+	return g, nil
 }
