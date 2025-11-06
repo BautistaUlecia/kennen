@@ -7,10 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type ListHandler struct{ listGroupsUseCase *group.ListGroup }
+type ListHandler struct {
+	listGroupsUseCase *group.ListGroup
+	mapper            GroupResponseMapper
+}
 
-func NewListHandler(uc *group.ListGroup) *ListHandler {
-	return &ListHandler{listGroupsUseCase: uc}
+func NewListHandler(uc *group.ListGroup, mapper GroupResponseMapper) *ListHandler {
+	return &ListHandler{
+		listGroupsUseCase: uc,
+		mapper:            mapper,
+	}
 }
 
 func (h *ListHandler) Register(r gin.IRouter) {
@@ -26,7 +32,7 @@ func (h *ListHandler) list(c *gin.Context) {
 
 	responses := make([]GroupResponse, 0, len(groups))
 	for _, g := range groups {
-		responses = append(responses, toGroupResponse(g))
+		responses = append(responses, h.mapper.ToGroupResponse(g))
 	}
 	c.JSON(http.StatusOK, responses)
 

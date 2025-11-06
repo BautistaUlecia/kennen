@@ -8,9 +8,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type GetHandler struct{ getGroupUseCase *group.GetGroup }
+type GetHandler struct {
+	getGroupUseCase *group.GetGroup
+	mapper          GroupResponseMapper
+}
 
-func NewGetHandler(uc *group.GetGroup) *GetHandler { return &GetHandler{getGroupUseCase: uc} }
+func NewGetHandler(uc *group.GetGroup, mapper GroupResponseMapper) *GetHandler {
+	return &GetHandler{
+		getGroupUseCase: uc,
+		mapper:          mapper,
+	}
+}
 
 func (h *GetHandler) Register(r gin.IRouter) {
 	r.GET("/groups/:id", h.get)
@@ -28,7 +36,7 @@ func (h *GetHandler) get(c *gin.Context) {
 		return
 	}
 
-	gr := toGroupResponse(g)
+	gr := h.mapper.ToGroupResponse(g)
 	c.JSON(http.StatusOK, gr)
 
 }
