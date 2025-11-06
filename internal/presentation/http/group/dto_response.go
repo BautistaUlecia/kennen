@@ -6,12 +6,12 @@ type GroupResponse struct {
 	Summoners []SummonerResponse `json:"summoners"`
 }
 type SummonerResponse struct {
-	Name   string `json:"name"`
-	Tier   string `json:"tier"`
-	Rank   string `json:"rank"`
-	LP     int    `json:"lp"`
-	Wins   int    `json:"wins"`
-	Losses int    `json:"losses"`
-	IconID int    `json:"icon_id"`
-	Level  int    `json:"level"`
+	Name    string `json:"name"`
+	Tier    string `json:"tier"`
+	Rank    string `json:"rank"`
+	LP      int    `json:"lp"`
+	Wins    int    `json:"wins"`
+	Losses  int    `json:"losses"`
+	IconURL string `json:"icon_url"`
+	Level   int    `json:"level"`
 }

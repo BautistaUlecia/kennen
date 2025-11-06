@@ -9,10 +9,14 @@ import (
 
 type AddHandler struct {
 	addToGroupUseCase *group.AddToGroup
+	versionGetter     VersionGetter
 }
 
-func NewAddHandler(uc *group.AddToGroup) *AddHandler {
-	return &AddHandler{addToGroupUseCase: uc}
+func NewAddHandler(uc *group.AddToGroup, vg VersionGetter) *AddHandler {
+	return &AddHandler{
+		addToGroupUseCase: uc,
+		versionGetter:     vg,
+	}
 }
 
 func (h *AddHandler) Register(r gin.IRouter) {
@@ -32,6 +36,6 @@ func (h *AddHandler) addToGroup(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
 	}
 
-	gr := toGroupResponse(g)
+	gr := toGroupResponse(g, h.versionGetter)
 	c.JSON(http.StatusOK, gr)
 }

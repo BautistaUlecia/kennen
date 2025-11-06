@@ -5,6 +5,7 @@ import (
 	infragroup "kennen/internal/infrastructure/group"
 	"kennen/internal/infrastructure/riot"
 	httpgroup "kennen/internal/presentation/http/group"
+	"kennen/internal/routine"
 	"kennen/internal/usecase/group"
 	"net/http"
 	"os"
@@ -39,15 +40,19 @@ func main() {
 	gr := infragroup.NewInMemoryRepository()
 	rc := riot.NewClient(http.DefaultClient, apiKey)
 
+	// Start version manager routine
+	versionManager := routine.NewVersionManager(http.DefaultClient)
+	versionManager.Start()
+
 	lguc := group.NewListGroup(gr)
 	cguc := group.NewCreateGroup(gr)
 	gguc := group.NewGetGroup(gr)
 	atguc := group.NewAddToGroup(gr, rc)
 
-	httpgroup.NewListHandler(lguc).Register(api)
-	httpgroup.NewGetHandler(gguc).Register(api)
-	httpgroup.NewCreateHandler(cguc).Register(api)
-	httpgroup.NewAddHandler(atguc).Register(api)
+	httpgroup.NewListHandler(lguc, versionManager).Register(api)
+	httpgroup.NewGetHandler(gguc, versionManager).Register(api)
+	httpgroup.NewCreateHandler(cguc, versionManager).Register(api)
+	httpgroup.NewAddHandler(atguc, versionManager).Register(api)
 
 	g.Run(":8080")
 }
