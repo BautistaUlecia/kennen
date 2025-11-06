@@ -67,7 +67,7 @@ func (vm *VersionManager) fetchLatestVersion() error {
 	vm.latestVersion = versions[0]
 	vm.mu.Unlock()
 
-	log.Printf("Updated API version to: %s", versions[0])
+	log.Printf("Updated API version to: %s", vm.latestVersion)
 	return nil
 }
 
