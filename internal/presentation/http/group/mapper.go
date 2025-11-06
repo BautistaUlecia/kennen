@@ -5,6 +5,8 @@ import (
 	"kennen/internal/domain"
 )
 
+const profileIconURLTemplate = "https://ddragon.leagueoflegends.com/cdn/%s/img/profileicon/%d.png"
+
 type VersionGetter interface {
 	GetLatestVersion() string
 }
@@ -15,7 +17,7 @@ func toGroupResponse(g *domain.Group, vg VersionGetter) GroupResponse {
 	apiVersion := vg.GetLatestVersion()
 
 	for _, s := range g.Summoners {
-		iconURL := fmt.Sprintf("https://ddragon.leagueoflegends.com/cdn/%s/img/profileicon/%d.png", apiVersion, s.IconID)
+		iconURL := fmt.Sprintf(profileIconURLTemplate, apiVersion, s.IconID)
 		out.Summoners = append(out.Summoners, SummonerResponse{
 			Name:    s.Name,
 			Tier:    s.Tier,
