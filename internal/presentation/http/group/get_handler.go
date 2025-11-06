@@ -10,13 +10,13 @@ import (
 
 type GetHandler struct {
 	getGroupUseCase *group.GetGroup
-	versionGetter   VersionGetter
+	mapper          GroupResponseMapper
 }
 
-func NewGetHandler(uc *group.GetGroup, vg VersionGetter) *GetHandler {
+func NewGetHandler(uc *group.GetGroup, mapper GroupResponseMapper) *GetHandler {
 	return &GetHandler{
 		getGroupUseCase: uc,
-		versionGetter:   vg,
+		mapper:          mapper,
 	}
 }
 
@@ -36,7 +36,7 @@ func (h *GetHandler) get(c *gin.Context) {
 		return
 	}
 
-	gr := toGroupResponse(g, h.versionGetter)
+	gr := h.mapper.ToGroupResponse(g)
 	c.JSON(http.StatusOK, gr)
 
 }

@@ -9,13 +9,13 @@ import (
 
 type ListHandler struct {
 	listGroupsUseCase *group.ListGroup
-	versionGetter     VersionGetter
+	mapper            GroupResponseMapper
 }
 
-func NewListHandler(uc *group.ListGroup, vg VersionGetter) *ListHandler {
+func NewListHandler(uc *group.ListGroup, mapper GroupResponseMapper) *ListHandler {
 	return &ListHandler{
 		listGroupsUseCase: uc,
-		versionGetter:     vg,
+		mapper:            mapper,
 	}
 }
 
@@ -32,7 +32,7 @@ func (h *ListHandler) list(c *gin.Context) {
 
 	responses := make([]GroupResponse, 0, len(groups))
 	for _, g := range groups {
-		responses = append(responses, toGroupResponse(g, h.versionGetter))
+		responses = append(responses, h.mapper.ToGroupResponse(g))
 	}
 	c.JSON(http.StatusOK, responses)
 

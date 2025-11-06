@@ -44,15 +44,18 @@ func main() {
 	versionManager := routine.NewVersionManager(http.DefaultClient)
 	versionManager.Start()
 
+	// Create mapper with version manager
+	mapper := httpgroup.NewGroupResponseMapper(versionManager)
+
 	lguc := group.NewListGroup(gr)
 	cguc := group.NewCreateGroup(gr)
 	gguc := group.NewGetGroup(gr)
 	atguc := group.NewAddToGroup(gr, rc)
 
-	httpgroup.NewListHandler(lguc, versionManager).Register(api)
-	httpgroup.NewGetHandler(gguc, versionManager).Register(api)
-	httpgroup.NewCreateHandler(cguc, versionManager).Register(api)
-	httpgroup.NewAddHandler(atguc, versionManager).Register(api)
+	httpgroup.NewListHandler(lguc, mapper).Register(api)
+	httpgroup.NewGetHandler(gguc, mapper).Register(api)
+	httpgroup.NewCreateHandler(cguc, mapper).Register(api)
+	httpgroup.NewAddHandler(atguc, mapper).Register(api)
 
 	g.Run(":8080")
 }

@@ -11,10 +11,24 @@ type VersionGetter interface {
 	GetLatestVersion() string
 }
 
-func toGroupResponse(g *domain.Group, vg VersionGetter) GroupResponse {
+type GroupResponseMapper interface {
+	ToGroupResponse(g *domain.Group) GroupResponse
+}
+
+type groupResponseMapper struct {
+	versionGetter VersionGetter
+}
+
+func NewGroupResponseMapper(vg VersionGetter) GroupResponseMapper {
+	return &groupResponseMapper{
+		versionGetter: vg,
+	}
+}
+
+func (m *groupResponseMapper) ToGroupResponse(g *domain.Group) GroupResponse {
 	out := GroupResponse{ID: g.ID, Name: g.Name}
 	out.Summoners = make([]SummonerResponse, 0, len(g.Summoners))
-	apiVersion := vg.GetLatestVersion()
+	apiVersion := m.versionGetter.GetLatestVersion()
 
 	for _, s := range g.Summoners {
 		iconURL := fmt.Sprintf(profileIconURLTemplate, apiVersion, s.IconID)

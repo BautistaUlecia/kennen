@@ -10,13 +10,13 @@ import (
 
 type CreateHandler struct {
 	createGroupUseCase *group.CreateGroup
-	versionGetter      VersionGetter
+	mapper             GroupResponseMapper
 }
 
-func NewCreateHandler(uc *group.CreateGroup, vg VersionGetter) *CreateHandler {
+func NewCreateHandler(uc *group.CreateGroup, mapper GroupResponseMapper) *CreateHandler {
 	return &CreateHandler{
 		createGroupUseCase: uc,
-		versionGetter:      vg,
+		mapper:             mapper,
 	}
 }
 
@@ -42,6 +42,6 @@ func (h *CreateHandler) create(c *gin.Context) {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-	gr := toGroupResponse(g, h.versionGetter)
+	gr := h.mapper.ToGroupResponse(g)
 	c.JSON(http.StatusCreated, gr)
 }
