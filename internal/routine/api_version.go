@@ -24,15 +24,12 @@ func NewVersionManager(httpClient *http.Client) *VersionManager {
 	}
 }
 
-// Start begins the routine that fetches the latest version every hour
 func (vm *VersionManager) Start() {
-	// Fetch immediately on start
 	if err := vm.fetchLatestVersion(); err != nil {
 		log.Printf("Error fetching initial version: %v", err)
 	}
 
-	// Start the ticker for hourly updates
-	ticker := time.NewTicker(1 * time.Hour)
+	ticker := time.NewTicker(24 * time.Hour)
 	go func() {
 		for range ticker.C {
 			if err := vm.fetchLatestVersion(); err != nil {
@@ -42,7 +39,6 @@ func (vm *VersionManager) Start() {
 	}()
 }
 
-// fetchLatestVersion retrieves the latest version from the DDragon API
 func (vm *VersionManager) fetchLatestVersion() error {
 	resp, err := vm.httpClient.Get(versionsURL)
 	if err != nil {
@@ -71,7 +67,6 @@ func (vm *VersionManager) fetchLatestVersion() error {
 	return nil
 }
 
-// GetLatestVersion returns the currently stored latest version
 func (vm *VersionManager) GetLatestVersion() string {
 	vm.mu.RLock()
 	defer vm.mu.RUnlock()
