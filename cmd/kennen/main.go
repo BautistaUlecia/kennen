@@ -44,6 +44,10 @@ func main() {
 	versionManager := routine.NewVersionManager(http.DefaultClient)
 	versionManager.Start()
 
+	// Start elo updater routine
+	eloUpdater := routine.NewEloUpdater(rc, gr)
+	eloUpdater.Start()
+
 	// Create mapper with version manager
 	mapper := httpgroup.NewGroupResponseMapper(versionManager)
 
